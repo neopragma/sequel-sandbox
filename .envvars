@@ -1,0 +1,5 @@
+export DATABASE_URL=sqlite://db/testdb.sqlite3
+export PROJECT_NAME=sequel-sandbox
+export PROJECT_ROOT="$HOME/projects/$PROJECT_NAME"
+export PATH=".:$PROJECT_ROOT/scripts:$PATH"
+export SEQUEL_LOG="$PROJECT_ROOT/logs/sequel.log"
