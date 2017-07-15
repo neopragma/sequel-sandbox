@@ -5,8 +5,9 @@ require_relative "./db_helpers"
 class DbInit
   include DbHelpers
 
-  # Create tables that represent domain entities without behavior; bags of data.
   def create_tables
+    drop_table :people_roles
+
     db.create_table! :collections  do
       primary_key :id
       String :title, :null=>false
@@ -24,6 +25,7 @@ class DbInit
       String :surname, :null=>false
       String :given_name
       String :nickname
+
     end
 
     db.create_table! :pieces do
@@ -44,7 +46,16 @@ class DbInit
       primary_key :id
       String :role_name, :null=>false
     end
+
+    db.create_table! :people_roles do
+      foreign_key :person_id, :people, { :deferrable => true, :on_delete => :cascade, :on_update => :set_null }
+      foreign_key :role_id, :roles, { :deferrable => true, :on_delete => :cascade, :on_update => :set_null }
+      primary_key [ :person_id, :role_id ]
+    end
+
   end
+
+
 
   # Create associations between base tables
   def create_relations
@@ -83,5 +94,4 @@ end
 
 dbinit = DbInit.new
 dbinit.create_tables
-dbinit.create_relations
 dbinit.load_data

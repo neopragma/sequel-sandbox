@@ -61,7 +61,7 @@ go
 The default rake task does this:
 
 * deletes the sequel log file named in env var ```SEQUEL_LOG```
-* invokes ```reset_db``` to re-create and loads the database (by running app/db_init.rb)
+* invokes ```reset_db``` to re-create and load the database (by running ```app/db_init.rb```)
 * invokes ```spec```.
 
 #### run the sqlite3 command-line utility

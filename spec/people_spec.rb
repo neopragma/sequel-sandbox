@@ -69,6 +69,6 @@ context 'sequel gem:' do
       ]
     end
 
-  end # describe roles table
+  end # describe people table
 
 end # context sequel gem
