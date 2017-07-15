@@ -84,7 +84,9 @@ A single database initialization script also provides comprehensive documentatio
 
 ## atom editor
 
-To install the ```atom``` editor:
+If you want to play with this project, you are free to edit the files using any tools you please. Personally, I find a lightweight yet feature-complete text editor to be adequate for this purpose. Atom provides Ruby-aware color highlighting as well as a markdown preview feature. For this project, I haven't had a need for any of the additional functionality provided by IDEs.
+
+To install atom:
 
 ```shell
 sudo apt-add-repository ppa:webupd8team/atom
