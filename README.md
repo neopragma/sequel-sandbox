@@ -64,6 +64,14 @@ The default rake task does this:
 * invokes ```reset_db``` to re-create and load the database (by running ```app/db_init.rb```)
 * invokes ```spec```.
 
+#### re-create the database and load initial data
+
+This runs a ruby script that initializes the database. It's the same script that is executed from the default rake task.
+
+```
+ruby app/db_init.rb
+```
+
 #### run the sqlite3 command-line utility
 
 This runs ```sqlite3``` passing the path to the sandbox database.
