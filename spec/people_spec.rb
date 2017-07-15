@@ -4,6 +4,14 @@ class Db
   include DbHelpers
 end
 
+RSpec::Matchers.define :be_sorted_as do |expected|
+  match do |actual|
+    actual.each_with_index do |row_values, index|
+      (row_values[:surname] == expected[index][0]) && (row_values[:given_name] == expected[index][1])
+    end
+  end
+end
+
 context 'sequel gem:' do
 
   before do
@@ -13,61 +21,54 @@ context 'sequel gem:' do
   describe 'people table:' do
 
     before do
-      @dbtest.clear_people
+      @dbtest.clear_table :people
     end
 
     it 'deletes all rows from the people table' do
-      expect(@dbtest.find_all_people.count).to eq 0
+      expect(@dbtest.people.count).to eq 0
     end
 
     it 'inserts one row into the people table' do
-      add_person 'Bach', 'Carl Philip Emmanuel', 'C.P.E. Bach'
-      expect(@dbtest.find_all_people.count).to eq 1
+      @dbtest.add_person 'Bach', 'Carl Philip Emmanuel', 'C.P.E. Bach'
+      expect(@dbtest.people.count).to eq 1
     end
     it 'inserts the expected values into a single row in the people table' do
-      add_person 'Bach', 'Carl Philip Emmanuel', 'C.P.E. Bach'
-      expect(@dbtest.find_all_people.first[:surname]).to eq 'Bach'
-      expect(@dbtest.find_all_people.first[:given_name]).to eq 'Carl Philip Emmanuel'
-      expect(@dbtest.find_all_people.first[:nickname]).to eq 'C.P.E. Bach'
+      @dbtest.add_person 'Bach', 'Carl Philip Emmanuel', 'C.P.E. Bach'
+      expect(@dbtest.people.first[:surname]).to eq 'Bach'
+      expect(@dbtest.people.first[:given_name]).to eq 'Carl Philip Emmanuel'
+      expect(@dbtest.people.first[:nickname]).to eq 'C.P.E. Bach'
     end
 
     it 'returns the data for the specified person' do
-      add_person 'Bach', 'Carl Philip Emmanuel', 'C.P.E. Bach'
-      add_person 'Bach', 'Johann Sebastian', ''
-      expect(@dbtest.find_person('Bach', 'Johann Sebastian')[:surname])
+      @dbtest.add_person 'Bach', 'Carl Philip Emmanuel', 'C.P.E. Bach'
+      @dbtest.add_person 'Bach', 'Johann Sebastian', ''
+      expect(@dbtest.person_by_full_name('Bach', 'Johann Sebastian')[:surname])
         .to eq 'Bach'
-      expect(@dbtest.find_person('Bach', 'Johann Sebastian')[:given_name])
+      expect(@dbtest.person_by_full_name('Bach', 'Johann Sebastian')[:given_name])
         .to eq 'Johann Sebastian'
     end
 
     it 'returns all people matching on surname only' do
-      add_person 'Bach', 'Carl Philip Emmanuel', 'C.P.E. Bach'
-      add_person 'Bach', 'Johann Sebastian', ''
-      add_person 'Jones', 'Philip', ''
-      expect(@dbtest.find_person_by_surname('Bach').count).to eq 2      
+      @dbtest.add_person 'Bach', 'Carl Philip Emmanuel', 'C.P.E. Bach'
+      @dbtest.add_person 'Bach', 'Johann Sebastian', ''
+      @dbtest.add_person 'Jones', 'Philip', ''
+      expect(@dbtest.person_by_surname('Bach').count).to eq 2
     end
 
+    it 'returns all person data in ascending order by surname, given_name' do
+      @dbtest.add_person 'Wagner', 'Richard', ''
+      @dbtest.add_person 'Bach', 'Carl Philip Emmanuel', 'C.P.E. Bach'
+      @dbtest.add_person 'Jones', 'Philip', ''
+      @dbtest.add_person 'Bach', 'Johann Sebastian', ''
 
-=begin
-    it 'returns all role data in ascending order by role_name' do
-      @dbtest.add_roles([ "Soloist", "Arranger", "Engineer", "Conductor" ])
-      result = @dbtest.find_all_roles.all
-      expect(result[0][:role_name]).to eq 'Arranger'
-      expect(result[1][:role_name]).to eq 'Conductor'
-      expect(result[2][:role_name]).to eq 'Engineer'
-      expect(result[3][:role_name]).to eq 'Soloist'
+      expect(@dbtest.people.all).to be_sorted_as [
+        [ 'Bach', 'Carl Philip Emmanuel' ],
+        [ 'Bach', 'Johann Sebastian' ],
+        [ 'Jones', 'Philip' ],
+        [ 'Wagner', 'Richard' ]
+      ]
     end
-=end
+
   end # describe roles table
 
 end # context sequel gem
-
-private
-
-def add_person surname, given_name, nickname
-  @dbtest.add_person({
-    :surname => "#{surname}",
-    :given_name => "#{given_name}",
-    :nickname => "#{nickname}"
-  })
-end

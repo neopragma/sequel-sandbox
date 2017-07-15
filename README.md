@@ -61,7 +61,7 @@ go
 The default rake task does this:
 
 * deletes the sequel log file named in env var ```SEQUEL_LOG```
-* resets the database with ```db.migrate.reset```
+* invokes ```reset_db``` to re-create and loads the database (by running app/db_init.rb)
 * invokes ```spec```.
 
 #### run the sqlite3 command-line utility
@@ -82,6 +82,10 @@ migrate down
 migrate reset
 ```
 
+## lessons learned
+
+The migrations functionality is so flaky that I eventually gave up on it. I spent hours and hours trying to get it to behave consistently. If the slightest error occurs (ruby syntax or whatever), the migration logic can never again figure out the state of the database. The documentation states the migration feature is useful when there is more than one developer working on database changes concurrently, but I believe driving database changes through scripts that are under version control solves any conflicts in the same way as version control deals with conflicts in any other source file that goes into the build. Therefore, the lesson I learned here is not to use "migrations" for sequel, or for ActiveRecord or any other database wrapper. The feature only adds incidental complexity to a project, and most projects have enough necessary complexity on the merits without adding more.
+
 ## atom editor
 
 To install the ```atom``` editor:
@@ -93,10 +97,6 @@ sudo apt install -y atom
 ```
 
 Now ```atom``` should be referenced in ```/usr/bin.atom```. If you run ```atom``` from the project root directory, it will open the directory as a "project".
-
-## about migrations
-
-The sequel migrations extension works mostly like ActiveRecord, but not exactly. A key difference is the naming convention for migration files. Prepend a simple integer version number rather than a timestamp. An ActiveRecord-style timestamp looks like an integer, so it would probably work too, but I haven't tried it.
 
 ## license
 

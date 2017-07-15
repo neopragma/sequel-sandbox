@@ -3,50 +3,67 @@ require 'logger'
 
 module DbHelpers
 
-  # eliminate all defined people
-  def clear_people
+  # deletes all rows in the specified table
+  def clear_table table_name
+    db[table_name].delete
+  end
+
+  # insert one row into the labels table
+  # label_name is expected to be a string
+  def add_label label_name
     db.transaction do
-      find_all_people.delete
+      insert_into(db[:labels], {:label_name => label_name})
     end
+  end
+
+  # insert multiple rows into the labels table
+  # label_names is expected to be an array of strings
+  def add_labels label_names
+    label_names.each do |label_name|
+      add_label label_name
+    end
+  end
+
+  # return the row for the specified label name
+  def label label_name
+    db[:labels].where(:label_name => label_name).first
+  end
+
+  # return a sequel dataset containing all rows from the labels table, sorted
+  def labels
+    db[:labels].order(:label_name)
   end
 
   # insert one row into the people table
-  # key_values is expected to be a hash with keys corresponding to
-  # column names and values specifying the value of each column
-  def add_person key_values
+  def add_person surname, given_name, nickname
     db.transaction do
-      insert_into(find_all_people, key_values)
+      insert_into(db[:people],
+        { :surname => surname,
+          :given_name => given_name,
+          :nickname => nickname
+        })
     end
   end
 
-  def find_all_people
+  def people
     db[:people].order(:surname, :given_name)
   end
 
   # return the row for the specified role name
-  def find_person surname, given_name
-    find_all_people.where({ :surname => surname, :given_name => given_name }).first
+  def person_by_full_name surname, given_name
+    people.where({ :surname => surname, :given_name => given_name }).first
   end
 
   # return all matches from people table when only the surname is known
-  def find_person_by_surname surname
-    find_all_people.where(:surname => surname)
-  end
-
-  # eliminate all defined roles
-  def clear_roles
-    db.transaction do
-      find_all_roles.delete
-    end
+  def person_by_surname surname
+    people.where(:surname => surname)
   end
 
   # insert one row into the roles table
   # role_name is expected to be a string
   def add_role role_name
     db.transaction do
-      insert_into(find_all_roles, {:role_name => role_name})
-#      ds = find_all_roles
-#      ds.insert(:role_name => role_name)
+      insert_into(db[:roles], {:role_name => role_name})
     end
   end
 
@@ -59,12 +76,12 @@ module DbHelpers
   end
 
   # return the row for the specified role name
-  def find_role role_name
-    find_all_roles.where(:role_name => role_name).first
+  def role role_name
+    roles.where(:role_name => role_name).first
   end
 
   # return a sequel dataset containing all rows from the roles table
-  def find_all_roles
+  def roles
     db[:roles].order(:role_name)
   end
 
