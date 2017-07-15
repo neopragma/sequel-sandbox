@@ -72,19 +72,15 @@ This runs ```sqlite3``` passing the path to the sandbox database.
 db
 ```
 
-#### run database migrations
-
-This runs ```bundle exec rake db:migrate:xxxx```.
-
-```shell
-migrate up
-migrate down
-migrate reset
-```
-
 ## lessons learned
 
-The migrations functionality is so flaky that I eventually gave up on it. I spent hours and hours trying to get it to behave consistently. If the slightest error occurs (ruby syntax or whatever), the migration logic can never again figure out the state of the database. The documentation states the migration feature is useful when there is more than one developer working on database changes concurrently, but I believe driving database changes through scripts that are under version control solves any conflicts in the same way as version control deals with conflicts in any other source file that goes into the build. Therefore, the lesson I learned here is not to use "migrations" for sequel, or for ActiveRecord or any other database wrapper. The feature only adds incidental complexity to a project, and most projects have enough necessary complexity on the merits without adding more.
+#### sequel migrations
+
+The migrations functionality is so flaky that I eventually gave up on it. I spent hours and hours trying to get it to behave consistently. If the slightest error occurs (ruby syntax or whatever), the migration logic can never again figure out the state of the database.
+
+The documentation states the migration feature is useful when there is more than one developer working on database changes concurrently, but I believe driving database changes through scripts that are under version control solves any conflicts in the same way as version control deals with conflicts in any other source file that goes into the build.
+
+The database initialization script also provides comprehensive documentation of the schema in one place, as opposed to scattered across a series of migrations. See ```app/db_init.rb``` for an example.
 
 ## atom editor
 
