@@ -54,6 +54,13 @@ class DbInit
       primary_key [ :piece_id, :person_id, :role_id ]
     end
 
+    db.create_table! :people_roles_recordings do
+      foreign_key :recording_id, :recordings, { :deferrable => true, :on_delete => :cascade, :on_update => :set_null }
+      foreign_key :person_id, { :deferrable => true, :on_delete => :cascade, :on_update => :set_null }
+      foreign_key :role_id, { :deferrable => true, :on_delete => :cascade, :on_update => :set_null }
+      primary_key [ :recording_id, :person_id, :role_id ]
+    end
+
   end
 
 end

@@ -43,21 +43,8 @@ context 'sequel gem:' do
 
       $dbtest.add_roles([ 'Arranger', 'Composer', 'Performer', 'Soloist' ])
 
-      $dbtest.associate_person_with_role(
-        { :surname => 'Bach', :given_name => 'Carl Philip Emmanuel', :role_name => 'Composer' })
-      $dbtest.associate_person_with_role(
-        { :surname => 'Bach', :given_name => 'Johann Sebastian', :role_name => 'Composer' })
-      $dbtest.associate_person_with_role(
-        { :surname => 'Byrd', :given_name => 'William', :role_name => 'Composer' })
-      $dbtest.associate_person_with_roles(
-        { :surname => 'Prince', :given_name => '', :role_names => [ 'Composer', 'Performer' ] })
-      $dbtest.associate_person_with_role(
-        { :surname => 'Wagner', :given_name => 'Richard', :role_name => 'Composer' })
-      $dbtest.associate_person_with_roles(
-        { :surname => 'Jones', :given_name => 'Philip', :role_names => [ 'Arranger', 'Soloist' ]})
-
-        $dbtest.add_piece 'Christmas Oratorio', 'Nun seid Ihr wohl gerochen'
-        $dbtest.add_piece 'Christmas Oratorio', 'Ach, mein hertzliches Jesulein'
+      $dbtest.add_piece 'Christmas Oratorio', 'Nun seid Ihr wohl gerochen'
+      $dbtest.add_piece 'Christmas Oratorio', 'Ach, mein hertzliches Jesulein'
 
       $dbtest.associate_person_role_with_piece(
         { :surname => 'Bach',

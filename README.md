@@ -124,7 +124,11 @@ It was clear that github inserts dashes between the words of multi-word markdown
 
 Ultimately I gave up on decoding the magic and used plain HTML anchor tags. Not very sexy. I look forward to updating this note to reflect the improved understanding I will eventually gain. It will not be today.
 
-## atom editor
+## useful tools
+
+These are some tools I ended up using in the course of playing with this project. YMMV.
+
+#### atom editor
 
 If you want to play with this project, you are free to edit the files using any tools you please. Personally, I find a lightweight yet feature-complete text editor to be adequate for this purpose. Atom provides Ruby-aware color highlighting as well as a markdown preview feature. For this project, I haven't had a need for any of the additional functionality provided by IDEs.
 

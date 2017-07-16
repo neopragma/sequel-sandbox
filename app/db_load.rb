@@ -6,6 +6,7 @@ class DbLoad
   include DbHelpers
 
   def run
+    # table: people
     add_person 'Bach', 'Carl Philip Emmanuel', 'C.P.E. Bach'
     add_person 'Bach', 'Johann Sebastian', ''
     add_person 'Byrd', 'William', ''
@@ -21,6 +22,7 @@ class DbLoad
     add_person 'Tchaikovsky', 'Pyotr Ilyich', ''
     add_person 'Wagner', 'Richard', ''
 
+    # table: roles
     add_roles([
       'Arranger',
       'Composer',
@@ -30,7 +32,28 @@ class DbLoad
       'Performer',
       'Soloist'
     ])
-  end
+
+    # table: pieces
+    [
+      [ 'Christmas Oratorio', 'Ach, mein herzliches Jesulin' ],
+      [ 'Christmas Oratorio', 'Nun seid Ihr wohl gerochen' ],
+      [ 'Music for the Royal Fireworks', '' ],
+      [ 'Sonata pian\'e forte', '' ],
+      [ 'Trumpet Voluntary', '' ],
+      [ 'The Batell', 'The Marche to the Fighte' ],
+      [ 'The Batell', 'The Retraite' ],
+      [ 'Trumpet Tune and Air', '' ],
+      [ 'Galliard Battaglia', '' ],
+      [ 'March', '(C.P.E. Bach)' ],
+      [ 'Festmusik der Stadt Wien', 'Fanfare' ],
+      [ 'Humoresque', 'Op. 101, No. 7' ],
+      [ 'Sleeping Beauty', 'Waltz' ],
+      [ 'Fanfare for the Common Man', '' ],
+      [ 'Pictures at an Exhibition', 'Great Gate of Kiev' ]
+    ].each do |piece|
+      add_piece piece[0], piece[1]
+    end
+  end # run
 
 end
 
