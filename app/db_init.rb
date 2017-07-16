@@ -6,7 +6,6 @@ class DbInit
   include DbHelpers
 
   def create_tables
-    drop_table :people_roles
     drop_table :people_roles_pieces
 
     db.create_table! :collections  do
@@ -48,12 +47,6 @@ class DbInit
       String :role_name, :null=>false
     end
 
-    db.create_table! :people_roles do
-      foreign_key :person_id, :people, { :deferrable => true, :on_delete => :cascade, :on_update => :set_null }
-      foreign_key :role_id, :roles, { :deferrable => true, :on_delete => :cascade, :on_update => :set_null }
-      primary_key [ :person_id, :role_id ]
-    end
-
     db.create_table! :people_roles_pieces do
       foreign_key :piece_id, :pieces, { :deferrable => true, :on_delete => :cascade, :on_update => :set_null }
       foreign_key :person_id, { :deferrable => true, :on_delete => :cascade, :on_update => :set_null }
@@ -88,42 +81,7 @@ class DbInit
       'Performer',
       'Soloist'
     ])
-
-    [
-      [ 'Bach', 'Carl Philip Emmanuel', 'Composer' ],
-      [ 'Bach', 'Johann Sebastian', 'Composer' ],
-      [ 'Byrd', 'William', 'Composer' ],
-      [ 'Clarke', 'Jeremiah', 'Composer' ],
-      [ 'Copland', 'Aaron', 'Composer' ],
-      [ 'Gabrieli', 'Andrea', 'Composer' ],
-      [ 'Handel', 'Georg Fridric', 'Composer' ],
-      [ 'Howarth', 'Elgar', 'Arranger' ],
-      [ 'Howarth', 'Elgar', 'Performer' ],
-      [ 'Howarth', 'Elgar', 'Soloist' ],
-      [ 'Jones', 'Philip', 'Arranger' ],
-      [ 'Jones', 'Philip', 'Performer' ],
-      [ 'Jones', 'Philip', 'Soloist' ],
-      [ 'Mussorgsky', 'Modest', 'Composer' ],
-      [ 'Purcell', 'Henry', 'Composer' ],
-      [ 'Scheidt', 'Samuel', 'Composer' ],
-      [ 'Tchaikovsky', 'Pyotr Ilyich', 'Composer' ],
-      [ 'Wagner', 'Richard', 'Composer' ]
-
-    ].each do |data|
-      person_to_role data
-    end
   end
-
-private
-
-  def person_to_role data
-    associate_person_with_role({
-      :surname => data[0],
-      :given_name => data[1],
-      :role_name => data[2]
-    })
-  end
-
 
 end
 
