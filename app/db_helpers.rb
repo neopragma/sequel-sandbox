@@ -87,6 +87,27 @@ module DbHelpers
       .join(:roles, :id => Sequel[:people_roles][:role_id], :role_name => role_name).all
   end
 
+  # insert one row into the pieces table
+  # title and subtitle arguments are strings
+  def add_piece title, subtitle
+    db.transaction do
+      insert_into(db[:pieces], {:title => title, :subtitle => subtitle})
+    end
+  end
+
+  # retrieve all rows from pieces sorted ascending by title, subtitle
+  def pieces
+    db[:pieces].order(:title, :subtitle)
+  end
+
+  # retrieve all rows from pieces table that match on title alone or both
+  # title and subtitle.
+  # title and subtitle arguments are strings. subtitle can be an empty string.
+  def pieces_by_title title, subtitle
+    where_values = (subtitle == nil || subtitle == '') ? { :title => title } : { :title => title, :subtitle => subtitle }
+    pieces.where(where_values)
+  end
+
   # insert one row into the roles table
   # role_name is expected to be a string
   def add_role role_name
@@ -124,7 +145,7 @@ module DbHelpers
     end
   end
 
-  # associate one person with one role (it's many-to-many)
+  # associate one person with one role
   # { :surname => a, :given_name => b, :role_name => c}
   # :given_name can be omitted
   def associate_person_with_role values_hash
@@ -138,6 +159,35 @@ module DbHelpers
     db.transaction do
       db[:people_roles].insert({ :person_id => person.first[1], :role_id => role_row.first[1] })
     end
+  end
+
+  # associate a person_role combination with a piece
+  def associate_person_role_with_piece values_hash
+    person_role = person_as_role(values_hash)
+    piece = pieces_by_title(values_hash[:title], values_hash[:subtitle]).first
+    db.transaction do
+      db[:people_roles_pieces].insert({
+        :person_id => person_role[:person_id],
+        :role_id => person_role[:role_id],
+        :piece_id => piece[:id]
+      })
+    end
+  end
+
+  def composers_of values_hash
+    #TODO needs refactoring
+    piece_id = pieces_by_title(values_hash[:title], values_hash[:subtitle]).first[:id]
+    role_id = db[:roles].where(:role_name => 'Composer').first[:id]
+    composers = db[:people_roles_pieces].where(:piece_id => piece_id, :role_id => role_id).all
+    db[:people].where(:id => composers.first[:person_id]).all
+  end
+
+  def composed_by values_hash
+    #TODO needs refactoring
+    person_id = person_by_full_name(values_hash[:surname], values_hash[:given_name])[:id]
+    role_id = db[:roles].where(:role_name => 'Composer').first[:id]
+    associated_pieces = db[:people_roles_pieces].where(:person_id => person_id, :role_id => role_id).all
+    db[:pieces].where(:id => associated_pieces.first[:piece_id]).all 
   end
 
 #  private

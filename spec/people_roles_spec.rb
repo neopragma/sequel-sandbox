@@ -50,7 +50,7 @@ context 'sequel gem:' do
     $dbtest = Db.new
   end
 
-  describe 'roles table:' do
+  describe 'people_roles table:' do
 
     before do
       $dbtest.clear_table :people
@@ -59,6 +59,7 @@ context 'sequel gem:' do
       $dbtest.add_person 'Bach', 'Carl Philip Emmanuel', 'C.P.E. Bach'
       $dbtest.add_person 'Jones', 'Philip', ''
       $dbtest.add_person 'Bach', 'Johann Sebastian', ''
+      $dbtest.add_person 'Prince', '', 'Prince'
       $dbtest.add_roles([ 'Soloist', 'Composer' ])
     end
 
@@ -100,12 +101,18 @@ context 'sequel gem:' do
           :given_name => 'Richard',
           :role_name => 'Composer'
         })
+      $dbtest.associate_person_with_role(
+        { :surname => 'Prince',
+          :given_name => '',
+          :role_name => 'Composer'
+        })
 
       expect($dbtest.people_in_role('Composer'))
         .to include_people([
           { :surname => 'Bach', :given_name => 'Johann Sebastian'},
           { :surname => 'Jones', :given_name => 'Philip'},
-          { :surname => 'Wagner', :given_name => 'Richard' }
+          { :surname => 'Wagner', :given_name => 'Richard' },
+          { :surname => 'Prince', :given_name => '' }
         ])
     end
 

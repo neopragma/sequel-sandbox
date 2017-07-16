@@ -7,6 +7,7 @@ class DbInit
 
   def create_tables
     drop_table :people_roles
+    drop_table :people_roles_pieces
 
     db.create_table! :collections  do
       primary_key :id
@@ -53,18 +54,16 @@ class DbInit
       primary_key [ :person_id, :role_id ]
     end
 
+    db.create_table! :people_roles_pieces do
+      foreign_key :piece_id, :pieces, { :deferrable => true, :on_delete => :cascade, :on_update => :set_null }
+      foreign_key :person_id, { :deferrable => true, :on_delete => :cascade, :on_update => :set_null }
+      foreign_key :role_id, { :deferrable => true, :on_delete => :cascade, :on_update => :set_null }
+      primary_key [ :piece_id, :person_id, :role_id ]
+    end
+
   end
 
-
-
-  # Create associations between base tables
-  def create_relations
-    db.create_join_table!({:person_id=>:people, :role_id=>:roles})
-  end
-
-  # populate base data
   def load_data
-
     add_person 'Bach', 'Carl Philip Emmanuel', 'C.P.E. Bach'
     add_person 'Bach', 'Johann Sebastian', ''
     add_person 'Byrd', 'William', ''
@@ -72,6 +71,7 @@ class DbInit
     add_person 'Copland', 'Aaron', ''
     add_person 'Gabrieli', 'Andrea', ''
     add_person 'Handel', 'Georg Fridric', ''
+    add_person 'Howarth', 'Elgar', ''
     add_person 'Jones', 'Philip', ''
     add_person 'Mussorgsky', 'Modest', ''
     add_person 'Purcell', 'Henry', ''
@@ -88,7 +88,42 @@ class DbInit
       'Performer',
       'Soloist'
     ])
+
+    [
+      [ 'Bach', 'Carl Philip Emmanuel', 'Composer' ],
+      [ 'Bach', 'Johann Sebastian', 'Composer' ],
+      [ 'Byrd', 'William', 'Composer' ],
+      [ 'Clarke', 'Jeremiah', 'Composer' ],
+      [ 'Copland', 'Aaron', 'Composer' ],
+      [ 'Gabrieli', 'Andrea', 'Composer' ],
+      [ 'Handel', 'Georg Fridric', 'Composer' ],
+      [ 'Howarth', 'Elgar', 'Arranger' ],
+      [ 'Howarth', 'Elgar', 'Performer' ],
+      [ 'Howarth', 'Elgar', 'Soloist' ],
+      [ 'Jones', 'Philip', 'Arranger' ],
+      [ 'Jones', 'Philip', 'Performer' ],
+      [ 'Jones', 'Philip', 'Soloist' ],
+      [ 'Mussorgsky', 'Modest', 'Composer' ],
+      [ 'Purcell', 'Henry', 'Composer' ],
+      [ 'Scheidt', 'Samuel', 'Composer' ],
+      [ 'Tchaikovsky', 'Pyotr Ilyich', 'Composer' ],
+      [ 'Wagner', 'Richard', 'Composer' ]
+
+    ].each do |data|
+      person_to_role data
+    end
   end
+
+private
+
+  def person_to_role data
+    associate_person_with_role({
+      :surname => data[0],
+      :given_name => data[1],
+      :role_name => data[2]
+    })
+  end
+
 
 end
 
