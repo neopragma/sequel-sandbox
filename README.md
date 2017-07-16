@@ -102,13 +102,27 @@ db
 
 ## lessons learned
 
+These are reminders to myself of various things I learned by playing with this project. They don't all have to do with the ```sequel``` gem.
+
 #### sequel migrations
 
 The migrations functionality is so flaky that I eventually gave up on it. I spent hours and hours trying to get it to behave consistently. If the slightest error occurs (ruby syntax or whatever), the migration logic can never again figure out the state of the database.
 
-The documentation states the migration feature is useful when there is more than one developer working on database changes concurrently. Currently I don't believe this is a good solution. I believe driving database changes through scripts that are under version control solves any conflicts in the same way as version control deals with conflicts in any other source file that goes into the build.
+The documentation states the migration feature is useful when there is more than one developer working on database changes concurrently. My current view is this is not an optimal solution for multiple developers working together.
+
+Given that the developers check in small changes frequently, in accordance with contemporary notions of "good practice," then as long as they update their local repo frequently and run a database creation script as part of their micro-level red-green-refactor cycle, they will avoid conflicts in database definitions.
 
 A single database initialization script also provides comprehensive documentation of the schema in one place, as opposed to scattered across a series of migrations. See ```app/db_init.rb``` for an example.
+
+#### github flavored markdown
+
+There's copious documentation about markdown and about github's variant of markdown, but I didn't find an explanation or example of how to use markdown link notation for a link to a target on the same page (the README.md page, in this case).
+
+Github has a way to generate a table of contents for a markdown document, but once the table has been generated all the links include full absolute URLs, so I couldn't see how to duplicate the "source" notation for linking to these targets.
+
+It was clear that github inserts dashes between the words of multi-word markdown headings in its generated anchor (target) tags. It was not clear how to write a markdown-style link to navigate to such a target within the same document.
+
+Ultimately I gave up on decoding the magic and used plain HTML anchor tags. Not very sexy. I look forward to updating this note to reflect the improved understanding I will eventually gain. It will not be today.
 
 ## atom editor
 
