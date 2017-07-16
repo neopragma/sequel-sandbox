@@ -66,7 +66,7 @@ The default rake task does this:
 
 #### re-create the database
 
-This runs a ruby script that creates the database tables. I use this instead of migrations (see [notes below](#sequel -migrations)). It's the same script that is executed from the default rake task.
+This runs a ruby script that creates the database tables. I use this instead of migrations (see ![notes below](#sequel -migrations)). It's the same script that is executed from the default rake task.
 
 ```
 ruby app/db_init.rb
