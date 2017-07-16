@@ -64,12 +64,20 @@ The default rake task does this:
 * invokes ```reset_db``` to re-create and load the database (by running ```app/db_init.rb```)
 * invokes ```spec```.
 
-#### re-create the database and load initial data
+#### re-create the database
 
-This runs a ruby script that initializes the database. It's the same script that is executed from the default rake task.
+This runs a ruby script that create the database tables. I use this instead of migrations (see below). It's the same script that is executed from the default rake task.
 
 ```
 ruby app/db_init.rb
+```
+
+#### load the database
+
+This loads the database with stock data. This data is not used by the ```rspec``` examples.
+
+```shell
+ruby app/db_load.db
 ```
 
 #### run the sqlite3 command-line utility
