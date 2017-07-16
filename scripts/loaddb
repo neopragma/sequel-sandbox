@@ -1,0 +1,2 @@
+echo "running $PROJECT_ROOT/app/db_load.rb to load database $DATABASE_URL"
+ruby "$PROJECT_ROOT/app/db_load.rb"

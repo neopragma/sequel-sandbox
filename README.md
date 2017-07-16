@@ -72,12 +72,24 @@ This runs a ruby script that create the database tables. I use this instead of m
 ruby app/db_init.rb
 ```
 
+There's a rake task for resetting the database, so you can also run it like this:
+
+```shell
+bundle exec rake reset_db
+```
+
 #### load the database
 
-This loads the database with stock data. This data is not used by the ```rspec``` examples.
+This loads the database with stock data. This data is not used by the ```rspec``` examples. This script uses the value of ```DATABASE_URL``` to connect to the database. 
 
 ```shell
 ruby app/db_load.db
+```
+
+There's a script that wraps this execution, too.
+
+```shell
+loaddb
 ```
 
 #### run the sqlite3 command-line utility
