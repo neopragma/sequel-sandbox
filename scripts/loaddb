@@ -1,2 +1,4 @@
-echo "running $PROJECT_ROOT/app/db_load.rb to load database $DATABASE_URL"
+echo "$PROJECT_ROOT/app/db_init.rb: Initializing $DATABASE_URL"
+ruby "$PROJECT_ROOT/app/db_init.rb"
+echo "$PROJECT_ROOT/app/db_load.rb: Loading $DATABASE_URL"
 ruby "$PROJECT_ROOT/app/db_load.rb"
