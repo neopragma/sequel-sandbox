@@ -38,7 +38,7 @@ class DbInit
       primary_key :id
       String :filename, :null=>false
       String :description
-      Date :recording_datedb
+      Date :recording_date
       Integer :duration_in_seconds
     end
 

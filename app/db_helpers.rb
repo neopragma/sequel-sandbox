@@ -90,6 +90,25 @@ module DbHelpers
     pieces.where(where_values)
   end
 
+  # insert one row into the recordings table
+  # recording_date should be a string that looks like YYYY-MM-YY
+  def add_recording filename, duration_in_seconds, recording_date, description
+    db.transaction do
+      insert_into(db[:recordings],
+        {
+          :filename => filename,
+          :duration_in_seconds => duration_in_seconds,
+          :recording_date => recording_date,
+          :description => description
+        })
+    end
+  end
+
+  # return a sequel dataset containing all rows from the recordings table
+  def recordings
+    db[:recordings].order(:filename)
+  end
+
   # insert one row into the roles table
   # role_name is expected to be a string
   def add_role role_name
