@@ -46,7 +46,7 @@ context 'sequel gem:' do
       $dbtest.add_piece 'Christmas Oratorio', 'Nun seid Ihr wohl gerochen'
       $dbtest.add_piece 'Christmas Oratorio', 'Ach, mein hertzliches Jesulein'
 
-      $dbtest.associate_person_role_with_piece(
+      $dbtest.associate_person_role_and_piece(
         { :surname => 'Bach',
           :given_name => 'Johann Sebastian',
           :role_name => 'Composer',
@@ -54,13 +54,46 @@ context 'sequel gem:' do
           :subtitle => 'Nun seid Ihr wohl gerochen'
         })
 
-        $dbtest.associate_person_role_with_piece(
+        $dbtest.associate_person_role_and_piece(
         { :surname => 'Bach',
           :given_name => 'Johann Sebastian',
           :role_name => 'Composer',
           :title => 'Christmas Oratorio',
           :subtitle => 'Ach, mein hertzliches Jesulein'
         })
+    end
+
+    it 'raises runtime error when the person is not in the people table' do
+      expect{ $dbtest.associate_person_role_and_piece(
+        { :surname => 'Neuman',
+          :given_name => 'Alfred E.',
+          :role_name => 'Composer',
+          :title => 'Christmas Oratorio',
+          :subtitle => 'Nun seid Ihr wohl gerochen'
+        })
+      }.to raise_error 'Alfred E. Neuman was not found in table: people'
+    end
+
+    it 'raises runtime error when the role is not in the roles table' do
+      expect{ $dbtest.associate_person_role_and_piece(
+        { :surname => 'Bach',
+          :given_name => 'Johann Sebastian',
+          :role_name => 'Necromancer',
+          :title => 'Christmas Oratorio',
+          :subtitle => 'Nun seid Ihr wohl gerochen'
+        })
+      }.to raise_error 'No role named Necromancer was found in table: roles'
+    end
+
+    it 'raises runtime error when the piece is not in the pieces table' do
+      expect{ $dbtest.associate_person_role_and_piece(
+        { :surname => 'Bach',
+          :given_name => 'Johann Sebastian',
+          :role_name => 'Composer',
+          :title => 'Christmas Oratorio',
+          :subtitle => 'Das ist nicht mein schöner Untertitel'
+        })
+      }.to raise_error 'No piece was found in table pieces with title \'Christmas Oratorio\' and subtitle \'Das ist nicht mein schöner Untertitel\''
     end
 
     it 'identifies the composers of a given piece' do

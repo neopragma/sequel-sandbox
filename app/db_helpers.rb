@@ -117,10 +117,16 @@ module DbHelpers
   end
 
   # associate a person, role, and piece
-  def associate_person_role_with_piece values_hash
+  def associate_person_role_and_piece values_hash
     person = person_by_full_name(values_hash[:surname], values_hash[:given_name])
+    raise RuntimeError, "#{values_hash[:given_name]} #{values_hash[:surname]} was not found in table: people" unless person
+
     role = role(values_hash[:role_name])
+    raise RuntimeError, "No role named #{values_hash[:role_name]} was found in table: roles" unless role
+
     piece = pieces_by_title(values_hash[:title], values_hash[:subtitle]).first
+    raise RuntimeError, "No piece was found in table pieces with title \'#{values_hash[:title]}\' and subtitle \'#{values_hash[:subtitle]}\'" unless piece
+
     db.transaction do
       db[:people_roles_pieces].insert({
         :person_id => person[:id],
