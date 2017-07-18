@@ -104,6 +104,11 @@ module DbHelpers
     end
   end
 
+  # return the row for the specified recording by filename
+  def recording filename
+    recordings.where(:filename => filename).first
+  end
+
   # return a sequel dataset containing all rows from the recordings table
   def recordings
     db[:recordings].order(:filename)
@@ -153,6 +158,28 @@ module DbHelpers
         :piece_id => piece[:id]
       })
     end
+    db[:people_roles_pieces].where(:person_id => person[:id], :role_id => role[:id], :piece_id => piece[:id])
+  end
+
+  # associate a person, role, and recording
+  def associate_person_role_and_recording values_hash
+    person = person_by_full_name(values_hash[:surname], values_hash[:given_name])
+    raise RuntimeError, "#{values_hash[:given_name]} #{values_hash[:surname]} was not found in table: people" unless person
+
+    role = role(values_hash[:role_name])
+    raise RuntimeError, "No role named #{values_hash[:role_name]} was found in table: roles" unless role
+
+    recording = recording(values_hash[:filename])
+    raise RuntimeError, "No recording was found in table recordings with filename \'#{values_hash[:filename]}\'" unless recording
+
+    db.transaction do
+      db[:people_roles_recordings].insert({
+        :person_id => person[:id],
+        :role_id => role[:id],
+        :recording_id => recording[:id]
+      })
+    end
+    db[:people_roles_recordings].where(:person_id => person[:id], :role_id => role[:id], :recording_id => recording[:id])
   end
 
   def composers_of values_hash

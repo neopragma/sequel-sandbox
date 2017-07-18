@@ -7,22 +7,26 @@ class DbLoad
 
   def run
     # table: people
-    add_person 'Bach', 'Carl Philip Emmanuel', 'C.P.E. Bach'
-    add_person 'Bach', 'Johann Sebastian', ''
-    add_person 'Byrd', 'William', ''
-    add_person 'Clarke', 'Jeremiah', ''
-    add_person 'Copland', 'Aaron', ''
-    add_person 'Dvorak', 'Antonin', ''
-    add_person 'Gabrieli', 'Giovanni', ''
-    add_person 'Handel', 'Georg Fridric', ''
-    add_person 'Howarth', 'Elgar', ''
-    add_person 'Jones', 'Philip', ''
-    add_person 'Mussorgsky', 'Modest', ''
-    add_person 'Purcell', 'Henry', ''
-    add_person 'Scheidt', 'Samuel', ''
-    add_person 'Strauss', 'Richard', ''
-    add_person 'Tchaikovsky', 'Pyotr Ilyich', ''
-    add_person 'Wagner', 'Richard', ''
+    [
+      [ 'Bach', 'Carl Philip Emmanuel', 'C.P.E. Bach' ],
+      [ 'Bach', 'Johann Sebastian', '' ],
+      [ 'Byrd', 'William', '' ],
+      [ 'Clarke', 'Jeremiah', '' ],
+      [ 'Copland', 'Aaron', '' ],
+      [ 'Dvorak', 'Antonin', '' ],
+      [ 'Gabrieli', 'Giovanni', '' ],
+      [ 'Handel', 'Georg Fridric', '' ],
+      [ 'Howarth', 'Elgar', '' ],
+      [ 'Jones', 'Philip', '' ],
+      [ 'Mussorgsky', 'Modest', '' ],
+      [ 'Purcell', 'Henry', '' ],
+      [ 'Scheidt', 'Samuel', '' ],
+      [ 'Strauss', 'Richard', '' ],
+      [ 'Tchaikovsky', 'Pyotr Ilyich', '' ],
+      [ 'Wagner', 'Richard', '' ],
+    ].each do |person|
+      add_person person[0], person[1], person[2]
+    end
 
     # table: roles
     add_roles([
@@ -75,6 +79,26 @@ class DbLoad
       associate_person_role_and_piece({
         :surname => assoc[0], :given_name => assoc[1], :role_name => assoc[2], :title => assoc[3], :subtitle => assoc[4]
       })
+    end
+
+    # table: recordings
+    [
+      [ 'PJBE - Brass Splendour/Track 1.wav', 537, '1984-01-01', '' ],
+      [ 'PJBE - Brass Splendour/Track 2.wav', 193, '1984-01-01', '' ],
+      [ 'PJBE - Brass Splendour/Track 3.wav', 77, '1984-01-01', '' ],
+      [ 'PJBE - Brass Splendour/Track 4.wav', 277, '1984-01-01', '' ],
+      [ 'PJBE - Brass Splendour/Track 5.wav', 163, '1984-01-01', '' ],
+      [ 'PJBE - Brass Splendour/Track 6.wav', 243, '1984-01-01', '' ],
+      [ 'PJBE - Brass Splendour/Track 7.wav', 173, '1984-01-01', '' ],
+      [ 'PJBE - Brass Splendour/Track 8.wav', 110, '1984-01-01', '' ],
+      [ 'PJBE - Brass Splendour/Track 9.wav', 177, '1984-01-01', '' ],
+      [ 'PJBE - Brass Splendour/Track 10.wav', 132, '1984-01-01', '' ],
+      [ 'PJBE - Brass Splendour/Track 11.wav', 155, '1984-01-01', '' ],
+      [ 'PJBE - Brass Splendour/Track 12.wav', 186, '1984-01-01', '' ],
+      [ 'PJBE - Brass Splendour/Track 13.wav', 182, '1984-01-01', '' ],
+      [ 'PJBE - Brass Splendour/Track 14.wav', 529, '1984-01-01', '' ],
+    ].each do |recording|
+      add_recording recording[0], recording[1], recording[2], recording[3]
     end
 
   end # run

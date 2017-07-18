@@ -114,7 +114,6 @@ context 'sequel gem:' do
       ])
     end
 
-
   end # describe people_roles_pieces table
 
 end # context sequel gem
