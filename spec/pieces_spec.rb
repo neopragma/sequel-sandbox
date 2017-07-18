@@ -6,24 +6,6 @@ class Db
   include DbHelpers
 end
 
-RSpec::Matchers.define :be_sorted_as do |expected|
-  match do |actual|
-    actual.each_with_index do |row_values, index|
-      (row_values[:title] == expected[index][0]) && (row_values[:subtitle] == expected[index][1])
-    end
-  end
-end
-
-RSpec::Matchers.define :have_title_and_subtitle do |expected|
-  match do |actual|
-    (actual[:title] == expected[0]) && (actual[:subtitle] == expected[1])
-  end
-
-  failure_message do |actual|
-    "actual values were: title <#{actual[:title]}>, subtitle <#{actual[:subtitle]}}>"
-  end
-end
-
 context 'sequel gem:' do
 
   before do
@@ -71,7 +53,7 @@ context 'sequel gem:' do
       @dbtest.add_piece 'Christmas Oratorio', 'Ach, mein hertzliches Jesulein'
       @dbtest.add_piece 'Little Red Corvette', ''
 
-      expect(@dbtest.pieces.all).to be_sorted_as [
+      expect(@dbtest.pieces.all).to be_sorted_by_title_as [
         [ 'Christmas Oratorio', 'Ach, mein hertzliches Jesulein' ],
         [ 'Christmas Oratorio', 'Nun seid Ihr wohl gerochen' ],
         [ 'Little Red Corvette', '' ]

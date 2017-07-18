@@ -6,38 +6,6 @@ class Db
   include DbHelpers
 end
 
-RSpec::Matchers.define :have_attributes do |expected|
-  match do |actual|
-    actual[:filename] == expected[:filename] &&
-    actual[:duration_in_seconds] == expected[:duration_in_seconds] &&
-    actual[:recording_date].to_s == expected[:recording_date] &&
-    actual[:description] == expected[:description]
-  end
-
-  failure_message do |actual|
-    "\nactual[:filename] => #{actual[:filename]}, expected => #{expected[:filename]}\n" \
-    "actual[:duration_in_seconds] => #{actual[:duration_in_seconds]}, expected => #{expected[:duration_in_seconds]}\n" \
-    "actual[:recording_date] => #{actual[:recording_date]}, expected => #{expected[:recording_date]}\n" \
-    "actual[:description] => #{actual[:description]}, expected => #{expected[:description]}\n"
-  end
-end
-
-RSpec::Matchers.define :be_sorted_by_filename do |expected|
-  match do |actual|
-    actual_filenames = []
-    actual.each do |recording|
-      actual_filenames << recording[:filename]
-    end
-puts "actual: #{actual_filenames}, expected: #{expected}"
-
-    actual_filenames == expected
-  end
-
-  failure_message do |actual|
-    "Expected result set to be sorted ascending by filename, but it was not."
-  end
-end
-
 context 'sequel gem:' do
 
   before do

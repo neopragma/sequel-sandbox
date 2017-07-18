@@ -4,14 +4,6 @@ class Db
   include DbHelpers
 end
 
-RSpec::Matchers.define :be_sorted_as do |expected|
-  match do |actual|
-    actual.each_with_index do |row_values, index|
-      (row_values[:surname] == expected[index][0]) && (row_values[:given_name] == expected[index][1])
-    end
-  end
-end
-
 context 'sequel gem:' do
 
   before do
@@ -61,7 +53,7 @@ context 'sequel gem:' do
       @dbtest.add_person 'Jones', 'Philip', ''
       @dbtest.add_person 'Bach', 'Johann Sebastian', ''
 
-      expect(@dbtest.people.all).to be_sorted_as [
+      expect(@dbtest.people.all).to be_sorted_by_name_as [
         [ 'Bach', 'Carl Philip Emmanuel' ],
         [ 'Bach', 'Johann Sebastian' ],
         [ 'Jones', 'Philip' ],

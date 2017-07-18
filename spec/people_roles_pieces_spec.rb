@@ -6,22 +6,6 @@ class Db
   include DbHelpers
 end
 
-RSpec::Matchers.define :include_people do |expected|
-  match do |actual|
-    actual.each do |row|
-      expected.include?({ :surname => row[:surname], :given_name => row[:given_name]})
-    end
-  end
-end
-
-RSpec::Matchers.define :include_pieces do |expected|
-  match do |actual|
-    actual.each do |row|
-      expected.include?({ :title => row[:title], :subtitle => row[:subtitle]})
-    end
-  end
-end
-
 context 'sequel gem:' do
 
   before do

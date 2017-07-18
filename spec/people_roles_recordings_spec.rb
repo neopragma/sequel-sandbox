@@ -6,14 +6,6 @@ class Db
   include DbHelpers
 end
 
-RSpec::Matchers.define :include_recordings do |expected|
-  match do |actual|
-    actual.each do |row|
-      expected.include?({ :filename => row[:filename]})
-    end
-  end
-end
-
 context 'sequel gem:' do
 
   before do
