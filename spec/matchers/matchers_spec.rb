@@ -1,17 +1,13 @@
 
 RSpec::Matchers.define :have_attributes do |expected|
   match do |actual|
-    actual[:filename] == expected[:filename] &&
-    actual[:duration_in_seconds] == expected[:duration_in_seconds] &&
-    actual[:recording_date].to_s == expected[:recording_date] &&
-    actual[:description] == expected[:description]
+    expected.each do |key, value|
+      return false unless actual[key] == value
+    end
   end
 
   failure_message do |actual|
-    "\nactual[:filename] => #{actual[:filename]}, expected => #{expected[:filename]}\n" \
-    "actual[:duration_in_seconds] => #{actual[:duration_in_seconds]}, expected => #{expected[:duration_in_seconds]}\n" \
-    "actual[:recording_date] => #{actual[:recording_date]}, expected => #{expected[:recording_date]}\n" \
-    "actual[:description] => #{actual[:description]}, expected => #{expected[:description]}\n"
+    "\nactual: => #{actual}\nexpected: => #{expected}"
   end
 end
 

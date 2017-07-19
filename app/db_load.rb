@@ -6,6 +6,10 @@ class DbLoad
   include DbHelpers
 
   def run
+    # table: labels
+    #TODO load the labels table
+
+    
     # table: people
     [
       [ 'Bach', 'Carl Philip Emmanuel', 'C.P.E. Bach' ],

@@ -33,7 +33,7 @@ context 'sequel gem:' do
         .to have_attributes({
           :filename => 'PJBE - Brass Splendour/track1.wav',
           :duration_in_seconds => 537,
-          :recording_date => '1984-01-01',
+          :recording_date => Date.strptime("{ 1984, 1, 1 }", "{ %Y, %m, %d }"),
           :description => 'Some great brass playing'
           })
     end

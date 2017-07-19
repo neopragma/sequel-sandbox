@@ -18,6 +18,27 @@ module DbHelpers
     db[table_name].delete
   end
 
+  # return the row for the specified collection title
+  def collection title
+    roles.where(:title => title).first
+  end
+
+  # return a sequel dataset containing all rows from the collections table
+  def collections
+    db[:collections].order(:title)
+  end
+
+  # insert one row into the collections table
+  def add_collection title, year_released, remarks
+    db.transaction do
+      insert_into(db[:collections],
+        { :title => title,
+          :year_released => year_released,
+          :remarks => remarks
+        })
+    end
+  end
+
   # insert one row into the labels table
   # label_name is expected to be a string
   def add_label label_name
